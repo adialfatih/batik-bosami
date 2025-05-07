@@ -1,0 +1,168 @@
+di notepad aja wes mi, lebih enak gak pindah2 e
+
+
+tak ulang dari proses mana mi ? dari data penjualan di
+
+
+oke, ini kan halaman penjualan. 
+
+kita langsung input penjualan dulu.
+
+1. kita masukan data pengiriman, tanggal kirim, tujuan, nama customer/reseller, platfom. ini kedepan akan memudahkan dalam proses pengolahan data 
+2. kedua masukan detil produk yang di jual, ini bisa sekalian memasukan banyak produk dalam 1x penjualan. oke kita mulai 
+3. contoh ini semisal saya beli dari platfom tiktok. 
+4. beli 2 macam produk., longdress sama gamis model A
+5. di sini belum memasukan harga dulu. karena harga secara otomatis dari harga jual dan hpp di proses produksi.
+6. nantinya cuma memasukan harga yang di bayarkan oleh konsumen. 
+7. misal 
+
+hpp total = 90.000
+harga jual = 100.000
+
+kalau customer bayar nya 100.000 maka sistem akan menghitung keuntungan mu dari penjualan tersebut adalah 10.000
+misal karena customer nya bayar kurang karena diskon atau keluarga yang beli di kasih potongan 5rb
+
+nantinya kan harga yang di bayar customer misal aja 95.000, jadi keuntungannya hanya 5rb
+
+paham gak mi ?paham di
+
+Jadi sistem akan membaca keuntungan sesuai dengan harga yang dibayar konsumen kan? betul
+dengan dasar acuan adalah hpp dan harga jual. 
+contoh tadi harga jual 100.000 ternyata antum ngasih diskon banyak nih ke customer.
+customer cuma bayar 80.000 
+maka sistem otomatis menghitung kerugian sebesar 10.000 
+asumsi acuan adalah hpp
+
+gimana ? ok sesuai di 
+oke sip 
+
+
+tak lanjut.
+
+jadi setelah data penjualan di input. baru kemudian input pembayaran.
+masukan nominal yang di bayar kan oleh customer,
+proses bayar nya, tunai/tf/va
+kemudian bukti bayar nya (sebagai penyimpanan bukti bayar (opsional
+
+)
+
+oh ya di sini gak tak tampilkan detail nya. karena menurutku kemungkinan yang input penjualan pasti admin.
+jadi admin gak perlu tau berapa harga hpp nya. admin hanya tau berapa yang di bayar oleh customer.
+
+gitu betul kan mi ? betul 
+di, nominal yang dibayar sama customer ini persatuan barang kan ya? bukan pembayaran keseluruhan?
+yang ini keseluruhan mi ,gimana ? kalo misal ada beberapa varian barang, trus sistem akan ngebagi hargane pie? 
+berarti di input sendiri ? 
+produk 1 - > berpaa
+produk 2 - > berap 
+gitu ?
+
+iya di, sebaiknya begitu jadi bisa aman juga jadi misal 
+ produk A : 50 pcs x 10.000 = Rp. 500.000
+ Produk B : 10 pcs x 5.000 = Rp. 50.000
+
+jadi dalam satu invoice langsung kelihatan semua di
+
+lha di munculkan gak harga defaultnya ?
+misal produk A harga di perhitungan sistem kan hpp1+hpp2+hpp3+20% kan 
+mau di munculkan atau biar di input sama admin aja ?
+
+Diawal ketika input produk yang muncul akan harga default/ harga jual awal di. tetapi setelah itu kita bisa atur sendiri harga yang akan di jual ke luar 
+ini aku ada contoh dari Paper.id tak bukake ya di
+oke
+
+ini di tak contohkan ketika kita buat invoice/ ada penjualan
+
+ketika aku nambah dari stok, harga yang muncul akan harga default nya
+harga default 60.000, tapi kalo mau tak ganti 90.000 juga bisa di
+
+kira2 gitu di, seng tak maksud seperti itu
+
+oh oke. 
+sek bentar. buka wa mi,
+aku kirim foto. 
+
+di sistem ini kan ada harga jual yang di hitung secara otomatis dari hpp kan
+nah kebetulan ini gak bulet nih harga jualnya. gak 70.000 atau 75.000
+
+gak masalah kalau admin tau itu 77.xxx sekian gitu harga asline ?
+
+yo sebenere nk dekne pinter akan ketahuan margin ku berapa2 ne yo
+kiro2 pie di biar enak? 
+
+kalo selama ini di tempatku, misal aku udah ngitung hpp.
+
+misal : ketemu hpp 47.987
+terus aku wes ngitung harga jual ketemu 55.063, aku akan kasih ke adminku hargane 55.500 atau 56.000 gitu di
+
+pie menurutmu kalo dari segi sistem nya? 
+
+sistem ku ngikuti peper aja mi,
+hanya saja di bagian harga biar admin yang input harga aja po ?
+kosong aja gitu hargane 
+jadi misal ente ngasih tau ke admin harga jual ke adi (misal) per pcs 50rb 
+jadi admin gak tau harga dasare.. ribet gak ?
+
+Kalo gini gimana di, Sistem akan menghitung sampai di HPP. Selanjute kan ada harga jual. lah harga jual itu aku seng isi manual. tp nanti sistem tetep bisa ngebaca berapa margin yang tak dapet dari penjualan tersebut
+
+oke boleh deh. 
+nanti tak munculkan harga berdasarkan produksi ya di sini
+
+mungkin di sini hanya superadmin yang bisa liat hpp dan harga jual #noted-----> Sepakat
+nanti bisa di edit. 
+
+apa ne iki di seng bisa di edit? Harga juale po. iya harga jual 
+
+ok
+
+tak ubah sek atau lanjut mi ? Diubah sek ae di
+
+oke mi.
+oh ya lha yang cacat kirim lagi ke penjahit. enake di mana ya ?
+di halaman stok produksi memungkinkan gak ?
+
+seharuse masuk di stok produksi di, karena dia masuk jadi bagian mutasi di situ kan #noted
+
+
+oke wes. 
+selanjute kalau retur dari penjualan gimana mi ?prosesnya 
+
+barang retur dari penjualan dia akan : 
+1. update stok nya, karena kemasukan barang kan
+2. nota/ invoice yang tertera akan di perbaharui juga, otomatis yang tadinya sudah jadi pemasukan akan dikembalikan
+
+kalau barang retur tapi tukar :
+A. kalau barang sama maka akan update stok, sesuai dengan barang yang ditukar
+B kalau barang sama tapi beda varian, stok akan menyesuaikan varian yang ditukar, misala produk a var. merah dengan produk a var. hijau
+
+seperti itu di
+
+
+mi bisa liat tampilan invoice yang sudah ada ? bisa di
+
+nanti aku di kirime pdf e ya ? itu jadine apa si pdf kan ?
+
+dia endinge file pdf di, tak kirimi nanti di
+oke mi.
+
+terus di status itu ada unpaid sama paid ? berarti belum tentu dalam 1x penjualan itu langsung di bayar semua ya mi ?
+
+betul di, soale ada orang yang beli trus ngumpulke sek, hari ini ambil 10, besok tambah 10 lagi... makane statuse masih unpaid. dan ditempatku kalo belum bayar gak akan tak kirim barange
+
+oke berarti ini sebenere bisa di atasi dari pembayaran ya
+if(pembayran == lunas) barang di krim gitu ya ? iya 
+terus di bagian pembayaran ini apakah ada kredit / tempo ? ada di, ada pelangganku yang masih sistem tempo, karena sedulurku dewe
+
+
+oke wait tak tulis dulu list kerjaan ku :
+
+1. Edit harga jual di stok produksi #done 
+2. Add fitur mutasi cacat di stok produksi 
+3. input harga penjualan per jenis barang. #done
+4. tambah status kiriman barang dan status pembayran #done
+5. tambah sistem kredit / tempo di penjualan.  #done
+
+
+oke mi. itu dulu tak kerjake wes. mungkin besok tak presentasikan lagi
+
+siap di, syukron, jazakallah khair

@@ -1,0 +1,290 @@
+CREATE VIEW view_potongan_kain AS 
+SELECT 
+stok_kain_potongan.id_k_ptgan,
+stok_kain_potongan.inisial_kain,
+stok_kain_potongan.panjang_kain,
+stok_kain_potongan.harga_pcs,
+stok_kain_potongan.harga_ptg_pcs,
+stok_kain_potongan.jumlah_pcs,
+stok_kain_potongan.code_saved,
+t_potong_kain.id_tptg,
+t_potong_kain.codesaved,
+t_potong_kain.tgl_potong,
+t_potong_kain.kode_pemotong
+FROM
+stok_kain_potongan,t_potong_kain
+WHERE 
+stok_kain_potongan.code_saved = t_potong_kain.codesaved;
+
+
+///////////////////----- view ke 1---
+
+--NOTE
+1. status kain yang cacat setelah di babar belum di proses kemana-mana masih nggantung
+2. status kain yang cacat setelah di jahit belum di proses kemana-mana masih nggantung
+
+--------------------------------------------------------------------------------------------
+
+
+harga_kain_peryard = 11070
+
+
+bosamiba_newGudang
+ZcI!lO2d{-}3
+bosamiba_newgudanguser
+
+
+di input potong kain mi, 
+tak ubah proses inputnya. jadi antum input dulu keseluruhan 
+di input sampe selesai. biarkan hpp1 nya ngaco
+
+terus di close.
+terus buka lagi lewat view
+
+di bagian bawah ada hitung hpp 1
+
+pake tombol mi triger nya 
+
+OK di, tak input ini
+
+
+next proses 
+babar po ?
+
+IYO LANJUT NANG PROSES BABARAN
+
+KODE KAIN KI TAK ISINE OPO DI? 
+
+tadi kode kain sm-1.7 
+sm-2.05 
+nanti muncul pilhane
+
+
+kode kain sesuai yang di excel mu mi, 
+kode kain - ukuran - urutan potong
+sm-1.7-009
+
+IYO DI, IKI AKU SEK MADAKKE KARO PROSES SENG SEK BERJALAN 
+SELANJUTE PIE IKU DI
+
+
+informasi kode babar sudah sesuai mi ? SUDAH SESUAI
+proses selanjutnya 
+
+setelah di kirim di babar nanti di return dulu. formalitasnya aja balik ke gudang dulu
+carane klik pada angka di kolom jumlah selesai. 
+
+masuke jumlah kembali dan status nya misal 
+sleesai proses berarti barang sudah di batik
+atau cacat. nah di proses cacat ini seabgai note mi. belum tak apa apain kalau cacat. 
+
+OOH OK DI, NANTI UNTUK PROSES CACAT BISA DIBAHAS LANGSUNG AE, SOALE PENJELASANNYA AGAK PANJANG
+
+DI DIBAGIAN MODEL PRODUK BRARTI AKU KUDU MASUKINNYA GMN INI? 
+
+
+dibagian model, pertama pilih produknya dulu. 
+nanti modelnya menyesuaikan sesuai inputan di master produk. contoh
+
+pilihnya kan nama produknya dulu. 
+nanti modelnya sesuai varians yang ada.
+
+misal.. 
+dalam 1 kali proses jahit ke orang yang sama. ada 2 pengembalian produk. pernah terjadi gak mi ?PERNAH DI
+oke tak coba ya 
+100 itu 
+jadi produk a 50, jadi produk b 50
+
+misal juga dengan ukuran yang beda beda.. misal aja. ini dinamis mi
+
+nah di sini sudah masuk kode produksi, dan stok produk
+
+
+antum juga bisa upload gambar gamis indigonya mi. biar lebih menarik aja tampilannya. 
+
+gimana mi ? IYA SESUAI DI, BENER KO KUI, MANTAP HEHEHEHE
+misal jadi produk beda lagi 
+tak coba ulang prosesnya
+
+
+gitu mi
+
+SIP DI, SESUAI KARO SENG TAK KAREPKE IKI 
+MASHAALLAH
+
+untuk lihat hitungan hppnya
+
+oh belum tak munculkan. 
+ohya mi. di hpp mu itu ada tambahan 3000 itu apa ? tak sekaliankan ikutkan sesuai excel,
+harga jual juga tak masuke 20% + hpp
+
+
+betul gak ? 
+
+3000 ITU BEA LAIN LAIN, TERDIRI DARI HARGA LABEL + HARGA HANGTAG + HARGA KEMASAN + BIAYA KARYAWAN
+
+oh lha itu konstan gak mi ?
+soale tak masuke langsung.
+
+hpp = hpp1 + hpp2 + hpp3 + 3000
+
+SEJAU INI MASIH KONSTAN SEGITU DI, SOALE BELUM ADA PERUBAHAN DI BIAYA2 LAIN2. KALO MISAL 3000 ITU BISA DIISI MANUAL BISA GAK DI?
+T
+ru
+s yang 20% bisa diisi manual juga 
+
+apa 3000 dan 20% gak tak masuke aja dulu po ?
+biar nanti tambahan hpp4 (biayalain-lain)
+dan edit harga jual. ?
+
+KAYAK GITU BOLEH DI, JADI DI HPP 4 UNTUK HARGA LAIN2
+
+EDIT HARGA JUAL INI BRARTI SKEMANYA NANTI DIISI APA ITU DI? <-- terserah antum mau input harga langsung apa input presentase
+jadi harga_jual = hppAll + presentase.
+atau langsung harga_jual 
+
+pie enake ? HPP ALL + PERSENTASE AJA 
+
+lha kalau biaya lain-lain ?
+masuke kayak 3000 aja atau gimana ? 
+
+BEA LAIN2 DIISI LANGSUNG AJA DI KAYAK 3000 GITU
+oke berarti hitungannya kayak yang ini o
+hpp = hpp1 + hpp2 + hpp3 + (inputan biaya lain-lain) 
+
+gitu o
+
+IYA,
+
+oke. berarti nanti tak munculkan di
+
+enake dimana ? di selesai proses jahit po ? SEK TAK SAWANGE DI
+
+IYA MASUKKE DI SELESAI PROSES JAHIT AE DI, KOYONE PALING COCOK NG KONO
+
+berarti di bawhnya setelah milih produk, ada tambahan bea lain-lain, dan harga jual ya
+
+IYA DI
+
+sekarang transaksi gimana mi ?
+proses jual, proses retur dan barang cacatyang bisa di rekondisi. ?
+
+belum bisa mi, masih sampe situ. (produksi)
+
+OOH OK
+
+UNTUK PROSES JUAL, BRARTI KAN SEPERTI BIASA DI, KITA INPUT DATA PEMBELI 
+,
+mau di pisah gak si mi ?
+antara penjualan ke customer langsung sama ke reseller.
+jadi nanti bisa ada datane ke customer berapa persen
+ke reseller berapa persen ?
+
+kalau di pisah gini juga mudah nyari tau mana si reseller yang paling banyak ngejual 
+perlu gak ? BOLEH DI, SOALE AKU BISA NGETRACK PENJUALAN TERBANYAK DAN RESELLER PALING AKTIF JUGA 
+
+SAMA MUTASI PRODUK DI ITU ISINYA (BARANG CACAT, BARANG RETUR, BARANG PERBAIKAN)
+
+contoh kasus e gimana ?
+
+barang udah kejual -> retur -> perbaikan -> di jual lagi  ?
+
+CONTOH : 
+
+BARANG DATENG DARI JAHITAN > ADA LUBANG/CACAT > MASUK GOLONGAN CACAT/DEFECT > BARANG TIDAK BISA JUAL 
+(BRARTI NANTI MASUK KE PERHITUNGAN PRODUKSI, BAHWA MODAL PRODUKSINYA 100 PCS, TP YANG TERJUAL HANYA 99 PCS)
+
+CONTOH KE 2 :
+BARANG SELESAI JAHIT > BARANG TERJUAL > RETUR > BARANG KEMBALI KE STOK > DIJUAL LAGI
+
+CONTOH KE 3 : 
+BARANG DATENG JAHITAN > BARANG CACAT > MASUK GOLONGAN DEFECT > BARANG BISA DIJUAL
+
+KIRO2 JELAS RAK DI PENJELASANKU IKI 
+
+pada contoh 1 sebenere udah ada mi.
+contoh 1 sudah bisa di handle. di halaman stok produksi nanti kelihatan 
+
+lha contoh 2 maksude di jual lagi. berarti kan sama aja gak ada perhitungan spesifik kan mi ? apa harga jualnya beda ?
+
+UNTUK KEPERLUAN PEMBACAAN STOKNYA DI, JADI KITA BISA NGEBACA, ADA BERAPA PRODUK YANG SEDANG PERBAIK, ADA BERAPA PRODUK DEFECT NYA
+INI AKU TERINSPIRASI DARI SISTEM MUTASI DI SPREADSHEET KU YANG BUAT NGECEK STOK
+
+NANTI TAK LIHATKE WES DI
+
+nek misal gini mi,
+
+kan tadi barang kirim ke penjahit 100.
+di anggap selesai semua 100 itu di anggap bisa kejual semua, biar masuk stok aja dulu.
+
+nanti tak buatkan mutasi. 
+mutasi -> jual ORI ke customer
+mutasi -> jual ORI ke reseller 
+mutasi -> jual DEFECT ke customer
+mutasi -> jual DEFECT ke reseller
+mutasi -> barang rusak.
+
+gimana mi ?
+jadi kalau mutasi -> barang rusak (ini artinya barang gak bisa di jual) nanti masuk ke stok gudang defect
+
+gitu po ?
+
+IYA DI SEPERTI ITU, BARANG DARI JAHITAN MEMANG KEMBALI DULU, SETELAH ITU BARU KELIHATAN MANA YANG CACAT, PERBAIKAN DLL.
+
+nah kalau perbaikan masude gimana mi ? 
+
+PERBAIKAN ITU, PRODUK CACAT, AKAN KEMBALI KE JAHITAN, TRUS KEMBALI LAGI KE GUDANG UNTUK SIAP DI JUAL. ISTILAH DITEMPATKU 
+MUTASI-OUT + KETERANGAN PERBAIKAN, TGL & PERBAIKAN KE SIAPA
+
+ini ngaruh ke hpp gak ?
+
+GAK NGARUH DI, GAK ADA BIAYA 
+oke berarti cuma semacam catatan aja ya 
+
+produk A -> cacat apa -> keterangan perbaikan -> tanggal -> penjahit -> dan kembali ke gudang lagi kapan ?
+gitu po ? IYA BETUL, GK PERLU SEDETAIL ITU SIH DI, YANG PENTING KITA TAHU BARANG INI PERBAIKAN KAPAN, PENJAHITNYA SIAPA, KEMBALI KE GUDANG KAPAN
+
+, ooh oke mi
+SIP DI
+
+untuk tampilan stok nya gimana mi ? mudah di baca ? atau perlu tambahan ? 
+AKU BUTUH STOK AWAL, TERJUAL, CACAT, PERBAIKAN DAN STOK TERKINI
+
+oke mi, stok terkini bisa di liat di menu produk. 
+
+tapi tetep tak tampilkan nanti di stok produksi. karena itu berdasarkan kode produksi ya 
+
+DI DITAMBAHI KOLOM SEARCH BISA GAK? 
+
+di bagian mana mi , DIBAGIAN STOK DAN PRODUK, JADI BISA MEMPERCEPAT PENCARIAN
+
+
+di sini pok mi ? IYA DI YANG DI PRODUK MINTA TOLONG SEKALIAN YA DI (oke #noted)
+
+
+oke mi, tak lanjut kerjakan. 
+
+itu di bagian menu master mungkin banyak yang perlu di tambah mi, 
+kayak produk dan varians. biar sekalian muncul semua. 
+
+
+
+---#
+
+. http://localhost:8080/_azmi/pemotongan-kain //tambahkan / tampilkan sisa kain di pemotongan #done
+. tampilkan sisa tagihan di halaman pembayran   #done
+. Selesaikan proses cacat dan perbaikan #done
+. klik produk akan muncul detail stok nya termasuk defect/cacat  #done
+. edit harga invoice bcs cacat ///habis ini kerjakan ini
+. Upload foto produksi jahit dan babar
+
+--ALTER TABLE `produksi_babar`  ADD `foto_produksi` VARCHAR(255) NOT NULL DEFAULT 'null'  AFTER `codeproduksi`;
+--
+--new after laptop bener !!!
+--
+--ALTER TABLE `produksi_jahit` ADD `foto_produksi` TEXT NOT NULL DEFAULT 'null' AFTER `codeproduksijhit`;
+
+Code Erorr :
+
+21  -> ID Produksi Babar tidak ada. mungkin sudah di hapus
+192 -> Nomor invoice doble / > 1
