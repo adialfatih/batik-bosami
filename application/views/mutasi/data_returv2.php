@@ -20,9 +20,10 @@
                                     <tr>
                                         <th>TANGGAL</th>
                                         <th>PRODUK</th>
-                                        <th>UKURAN</th>
+                                        <th>QTY</th>
                                         <th>ALASAN</th>
                                         <th>KONDISI PRODUK</th>
+                                        <th>GANTI</th>
                                         <th></th>
                                     </tr>
                                 </thead>

@@ -23,11 +23,13 @@
 <?php if($scriptForm=="retur"){ ?>
     <script>
         function loadData(){
+            var urlAktif = ''+window.location.href;
+            console.log('Aktif : '+urlAktif);
             $('#tableBody').html('Loading...');
             $.ajax({
                 url:"<?=base_url('mutasi2/dataRetur');?>",
                 type: "POST",
-                data: {},
+                data: {"urlAktif": urlAktif},
                 cache: false,
                 success: function(dataResult){
                     if ($.fn.DataTable.isDataTable('#table1')) {
@@ -161,8 +163,7 @@
             $('#modalsBody25').html('<div style="width:100%;height:100px;display:flex;justify-content:center;align-items:center;flex-direction:column;gap:10px;"><img src="<?=base_url();?>assets/images/svg-loaders/rings.svg" alt="loading"><span>Please Wait...</span></div>');
             $('#large23').modal('show');
             $.ajax({
-                url: '<?= base_url("mutasi2/
-                ") ?>',
+                url: '<?= base_url("mutasi2/") ?>',
                 type: 'POST',
                 data: { "kd": kd },
                 cache: false,

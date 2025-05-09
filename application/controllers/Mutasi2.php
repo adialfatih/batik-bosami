@@ -56,6 +56,7 @@ class Mutasi2 extends CI_Controller
         $tahun      = $x[1];
         $num        = intval($x[2]);
         $nomorInv2  = strtoupper($nomorInv);
+        $nomorInv3  = "INV/".$tahun."/".sprintf("%04d", $num);
         if($tahun == "2025"){
             $cekInv     = $this->data_model->get_byid('t_penjualan', ['id_jual'=>$num]);
         } else {
@@ -69,7 +70,7 @@ class Mutasi2 extends CI_Controller
                 $codejual     = $cekInv->row("codejual");
                 $statusKirim  = $cekInv->row("status_pengiriman");
                 $namaCus      = $cekInv->row("nama_customer");
-                echo json_encode(array("statusCode" => 200, "message" => "Success", "nomorInv" => $nomorInv2, "id_jual" => $id_penjualan, "codejual"=>$codejual, "statusKirim"=>$statusKirim, "namaCus"=>$namaCus));
+                echo json_encode(array("statusCode" => 200, "message" => "Success", "nomorInv" => $nomorInv3, "id_jual" => $id_penjualan, "codejual"=>$codejual, "statusKirim"=>$statusKirim, "namaCus"=>$namaCus));
             } else {
                 echo json_encode(array("statusCode" => 400, "message" => "Error Code : 192"));
             }
@@ -272,6 +273,7 @@ class Mutasi2 extends CI_Controller
                         $this->data_model->delete('stok_produk_terjual', 'id_stokproduk', $id_stokproduk);
                     } //end Foreach
                     $all_id2 = implode(",", $all_id);
+                    $this->data_model->saved();
                     // update data penjualan
                     if($autoGanti=="tidak"){
                         $this->data_model->updatedata('id_pjdt',$isID,'t_penjualan_data', ['jumlah_terjual'=>$isJmlNow]);
@@ -341,46 +343,92 @@ class Mutasi2 extends CI_Controller
     } //end function simpanProsesRetur
 
     function dataRetur(){
-        $dt = $this->data_model->sort_record('id_pjrtr', 't_penjualan_retur');
-        if($dt->num_rows() > 0){
-            foreach($dt->result() as $val){
-                $id_jual    = $val->id_jual;
-                $coderetur  = $val->coderetur;
-                $alasan     = strtolower($val->alasan);
-                $kondisi    = $val->kondisi;
-                $ganti      = $val->ganti;
-                $tgl        = date('d M Y', strtotime($val->tgl_retur));
-                $dtjual     = $this->data_model->get_byid('t_penjualan', ['id_jual'=>$id_jual])->row_array();
-                $x          = explode('-', $dtjual['tgl_jual']);
-                $jmlRetur   = $this->db->query("SELECT SUM(jml_retur) AS jml FROM t_penjualan_retur_dt WHERE coderetur='$coderetur'")->row()->jml;
-                if($x[0] == "2025"){
-                    $no_inv = "INV/2025/".sprintf("%04d", $dtjual['id_jual']);
-                } else {
-                    $no_inv = "INV/".$x[0]."/".sprintf("%04d", $dtjual['no_inv']);
-                }
-                ?>
-                <tr>
-                    <td><?=$no_inv;?></td>
-                    <td><?=$tgl;?></td>
-                    <td><span class="badge bg-success" style="cursor:pointer;" onclick="detailRetur('<?=$coderetur;?>')"><?=$jmlRetur;?></span></td>
-                    <td><?=ucwords($alasan);?></td>
-                    <td>
-                        <?php
-                        if($kondisi=="ORI"){
-                            echo "<font style='color:green;'>Baik, Kembali ke gudang</font>";
-                        } else {
-                            if($kondisi=="Cacat"){
-                                echo "<font style='color:red;'>Cacat Permanent</font>";
+        $urlAktif = $this->input->post('urlAktif');
+        $x2       = explode('/', $urlAktif);
+        $terakhir = end($x2);
+        if($terakhir=="retur-produk"){
+            $dt       = $this->data_model->sort_record('tgl_retur', 'view_produk_retur');
+            if($dt->num_rows() > 0){
+                foreach($dt->result() as $val){
+                    //$id_jual    = $val->id_jual;
+                    $coderetur  = $val->coderetur;
+                    $alasan     = strtolower($val->alasan);
+                    $kondisi    = $val->kondisi;
+                    $ganti      = $val->ganti;
+                    $jmlRetur   = $val->jml_retur;
+                    $produk     = $val->nama_produk.", ".$val->models." (".$val->ukuran.")";
+                    $tgl        = date('d M Y', strtotime($val->tgl_retur));
+                    //$dtjual     = $this->data_model->get_byid('t_penjualan', ['id_jual'=>$id_jual])->row_array();
+                    //$x          = explode('-', $dtjual['tgl_jual']);
+                    //$jmlRetur   = $this->db->query("SELECT SUM(jml_retur) AS jml FROM t_penjualan_retur_dt WHERE coderetur='$coderetur'")->row()->jml;
+                    
+                    ?>
+                    <tr>
+                        <td><?=$tgl;?></td>
+                        <td><?=$produk;?></td>
+                        <td><span class="badge bg-success" style="cursor:pointer;"><?=$jmlRetur;?></span></td>
+                        <td><?=ucwords($alasan);?></td>
+                        <td>
+                            <?php
+                            if($kondisi=="ORI"){
+                                echo "<font style='color:green;'>Baik, Kembali ke gudang</font>";
                             } else {
-                                echo "<font style='color:orange;'>Defect</font>";
+                                if($kondisi=="Cacat"){
+                                    echo "<font style='color:red;'>Cacat Permanent</font>";
+                                } else {
+                                    echo "<font style='color:orange;'>Defect</font>";
+                                }
                             }
-                        }
-                        ?>
-                    </td>
-                    <td><?=$ganti=='ya'? '<font style="color:green;">Ya</font>' : 'Tidak';?></td>
-                    <td><a href="#" title="Batalkan Retur"><i class="bi bi-recycle" style="color:red;"></i></a></td>
-                </tr>
-                <?php
+                            ?>
+                        </td>
+                        <td><?=$ganti=='ya'? '<font style="color:green;">Ya</font>' : 'Tidak';?></td>
+                        <td><a href="#" title="Batalkan Retur"><i class="bi bi-recycle" style="color:red;"></i></a></td>
+                    </tr>
+                    <?php
+                }
+            }
+        } else { //tampilan retur awal
+            $dt       = $this->data_model->sort_record('id_pjrtr', 't_penjualan_retur');
+            if($dt->num_rows() > 0){
+                foreach($dt->result() as $val){
+                    $id_jual    = $val->id_jual;
+                    $coderetur  = $val->coderetur;
+                    $alasan     = strtolower($val->alasan);
+                    $kondisi    = $val->kondisi;
+                    $ganti      = $val->ganti;
+                    $tgl        = date('d M Y', strtotime($val->tgl_retur));
+                    $dtjual     = $this->data_model->get_byid('t_penjualan', ['id_jual'=>$id_jual])->row_array();
+                    $x          = explode('-', $dtjual['tgl_jual']);
+                    $jmlRetur   = $this->db->query("SELECT SUM(jml_retur) AS jml FROM t_penjualan_retur_dt WHERE coderetur='$coderetur'")->row()->jml;
+                    if($x[0] == "2025"){
+                        $no_inv = "INV/2025/".sprintf("%04d", $dtjual['id_jual']);
+                    } else {
+                        $no_inv = "INV/".$x[0]."/".sprintf("%04d", $dtjual['no_inv']);
+                    }
+                    ?>
+                    <tr>
+                        <td><?=$no_inv;?></td>
+                        <td><?=$tgl;?></td>
+                        <td><span class="badge bg-success" style="cursor:pointer;" onclick="detailRetur('<?=$coderetur;?>')"><?=$jmlRetur;?></span></td>
+                        <td><?=ucwords($alasan);?></td>
+                        <td>
+                            <?php
+                            if($kondisi=="ORI"){
+                                echo "<font style='color:green;'>Baik, Kembali ke gudang</font>";
+                            } else {
+                                if($kondisi=="Cacat"){
+                                    echo "<font style='color:red;'>Cacat Permanent</font>";
+                                } else {
+                                    echo "<font style='color:orange;'>Defect</font>";
+                                }
+                            }
+                            ?>
+                        </td>
+                        <td><?=$ganti=='ya'? '<font style="color:green;">Ya</font>' : 'Tidak';?></td>
+                        <td><a href="#" title="Batalkan Retur"><i class="bi bi-recycle" style="color:red;"></i></a></td>
+                    </tr>
+                    <?php
+                }
             }
         }
     } //end function dataRetur

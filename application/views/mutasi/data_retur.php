@@ -20,7 +20,7 @@
                                     <tr>
                                         <th>NO INVOICE</th>
                                         <th>TANGGAL</th>
-                                        <th>JUMLAH RETUR</th>
+                                        <th>QTY</th>
                                         <th>ALASAN</th>
                                         <th>KONDISI PRODUK</th>
                                         <th>GANTI</th>
