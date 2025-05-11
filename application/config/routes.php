@@ -33,8 +33,9 @@ $route['stok-produksi']         = 'transaksi4/stokkainproduksi';
 $route['mutasi/retur']          = 'mutasi2/returbarang';
 $route['mutasi/retur-produk']   = 'mutasi2/returbarangv2';
 
-$route['save-pembelian']        = 'proses/simpanpembeliankain';
-$route['simpan-babaran']        = 'proses/simpanbabar';
+$route['save-pembelian']            = 'proses/simpanpembeliankain';
+$route['simpan-babaran']            = 'proses/simpanbabar';
+$route['mutasi/penjualan-defect']   = 'mutasi/penjualanbs';
 
 $route['404_override']          = 'Notfounde';
 $route['translate_uri_dashes']  = FALSE;

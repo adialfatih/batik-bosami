@@ -141,14 +141,33 @@
                             <li class="submenu-item ">
                                 <a href="<?=base_url('mutasi/retur');?>" class='submenu-link'>&laquo; Retur</a>
                             </li>
-                            <li class="submenu-item ">
-                                <a href="<?=base_url('jahit');?>" class='submenu-link'>Cacat</a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </div>
             </li>
             <?php if($sess_akses=="root"){ ?>
+            <li class="menu-item  has-sub">
+                <a href="#" class='menu-link'>
+                    <i class="bi bi-clipboard2-check"></i>
+                    <span>Laporan</span>
+                </a>
+                <div class="submenu ">
+                    <div class="submenu-group-wrapper">
+                        <ul class="submenu-group">
+                            <li class="submenu-item">
+                                <a href="<?=base_url('laporan-cashflow');?>" class='submenu-link'>Cash Flow</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="<?=base_url('laporan-penjulan');?>" class='submenu-link'>Penjualan</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="<?=base_url('hutang-piutang');?>" class='submenu-link'>Hutang & Piutang</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
             <li class="menu-item ">
                 <a href="<?=base_url('users-account');?>" class='menu-link'>
                     <i class="bi bi-people-fill"></i>

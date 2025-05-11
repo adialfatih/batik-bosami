@@ -28,7 +28,7 @@ $config['controller_trigger'] = 'c';
 $config['function_trigger'] = 'm';
 $config['directory_trigger'] = 'd';
 
-$config['log_threshold'] = 4;
+$config['log_threshold'] = 1;
 
 $config['log_path'] = '';
 

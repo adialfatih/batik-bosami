@@ -12,6 +12,11 @@
             </footer>
         </div>
     </div>
+<?php if($scriptForm2=="ori"){?>
+<input type="hidden" id="scriptform2" value="ori">
+<?php } else { ?>
+<input type="hidden" id="scriptform2" value="bs">
+<?php } ?>
 <script src="<?=base_url();?>assets/js/bootstrap.js"></script>
 <script src="<?=base_url();?>assets/js/app.js"></script>
 <script src="<?=base_url();?>assets/js/pages/horizontal-layout.js"></script>
@@ -22,12 +27,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.9/dist/autoComplete.min.js"></script>
 <?php if($scriptForm=="penjualan"){ ?>
     <script>
+        var sc = $('#scriptform2').val();
         function loadDataPenjualan(){
             $('#tableBody').html('Loading...');
             $.ajax({
                 url:"<?=base_url('mutasi/datapenjualan');?>",
                 type: "POST",
-                data: {},
+                data: {"sc":sc},
                 cache: false,
                 success: function(dataResult){
                     if ($.fn.DataTable.isDataTable('#table1')) {
@@ -108,11 +114,12 @@
             var modelProduk         = $('#modelProduk').val();
             var ukrproduk           = $('#ukrproduk').val();
             var jmlPenjualan        = $('#jmlPenjualan').val();
+            var sc                  = $('#scriptform2').val();
             if(codejual!="" && tglJual!="" && kirimKe!="" && namaCus!="" && platformPenjualan!=""){
                 $.ajax({
                     url: '<?= base_url("mutasi/simpanPenjualan") ?>',
                     type: 'POST',
-                    data: { "codejual":codejual,"tglJual":tglJual,"kirimKe":kirimKe,"namaCus":namaCus,"platformPenjualan":platformPenjualan,"codeProduk":codeProduk,"modelProduk":modelProduk,"ukrproduk":ukrproduk,"jmlPenjualan":jmlPenjualan },
+                    data: { "codejual":codejual,"tglJual":tglJual,"kirimKe":kirimKe,"namaCus":namaCus,"platformPenjualan":platformPenjualan,"codeProduk":codeProduk,"modelProduk":modelProduk,"ukrproduk":ukrproduk,"jmlPenjualan":jmlPenjualan,"sc":sc },
                     cache: false,
                     success: function (dataResult) {
                         var dataResult = JSON.parse(dataResult);
@@ -198,11 +205,12 @@
             let namaProduk = $('#autoComplete').val();
             let modelProduk = $('#modelProduk').val();
             let ukrproduk = $('#ukrproduk').val();
+            let sc = $('#scriptform2').val();
             if(namaProduk!="" && modelProduk!="" && ukrproduk!=""){
                 $.ajax({
                     url: '<?= base_url("mutasi/get_stok") ?>',
                     type: 'POST',
-                    data: { "modelProduk": modelProduk, "ukrproduk": ukrproduk },
+                    data: { "modelProduk": modelProduk, "ukrproduk": ukrproduk, "sc": sc },
                     cache: false,
                     success: function (dataResult) {
                         var dataResult = JSON.parse(dataResult);

@@ -181,6 +181,7 @@
                                             <div class="modal-body" id="modalsBody">
                                                 <form action="<?=base_url('simpan-pembayaran');?>" enctype="multipart/form-data" method="post">
                                                 <input type="hidden" name="codejual" id="codejual2" value="0">
+                                                <input type="hidden" name="codesc" id="codesc" value="<?=$$scriptForm2;?>">
                                                 <div class="form-body">
                                                     <div class="row">
                                                         <div class="col-md-4">

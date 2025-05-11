@@ -70,7 +70,12 @@ class Mutasi2 extends CI_Controller
                 $codejual     = $cekInv->row("codejual");
                 $statusKirim  = $cekInv->row("status_pengiriman");
                 $namaCus      = $cekInv->row("nama_customer");
+                $oribs        = $cekInv->row("oribs");
+                if($oribs == "ori"){
                 echo json_encode(array("statusCode" => 200, "message" => "Success", "nomorInv" => $nomorInv3, "id_jual" => $id_penjualan, "codejual"=>$codejual, "statusKirim"=>$statusKirim, "namaCus"=>$namaCus));
+                } else {
+                    echo json_encode(array("statusCode" => 401, "message" => "Penjualan Defect Tidak Bisa Di Retur"));
+                }
             } else {
                 echo json_encode(array("statusCode" => 400, "message" => "Error Code : 192"));
             }
@@ -203,8 +208,10 @@ class Mutasi2 extends CI_Controller
                     $qry            = $this->db->query("SELECT * FROM stok_produk_terjual WHERE kode_varians='$kodeVarians' AND ukuran='$ukuran' AND codejual='$codejual' LIMIT $isJmlRetur ")->result();
                     $all_id         = array();
                     $this->data_model->saved('t_penjualan_retur_dt',['id_pjdt'=>$isID,'coderetur'=>$codeRetur,'jml_retur'=>$isJmlRetur]);
+                    $last_ID        = "";
                     foreach ($qry as $key => $value) {
                         $id_stokproduk      = $value->id_stokproduk;
+                        $last_ID            = $id_stokproduk;
                         $all_id[]           = "'".$id_stokproduk."'";
                         $kode_produk        = $value->kode_produk;
                         $kode_varians       = $value->kode_varians;
@@ -273,12 +280,20 @@ class Mutasi2 extends CI_Controller
                         $this->data_model->delete('stok_produk_terjual', 'id_stokproduk', $id_stokproduk);
                     } //end Foreach
                     $all_id2 = implode(",", $all_id);
-                    $this->data_model->saved();
                     // update data penjualan
                     if($autoGanti=="tidak"){
                         $this->data_model->updatedata('id_pjdt',$isID,'t_penjualan_data', ['jumlah_terjual'=>$isJmlNow]);
                     } else {
-                        $qry = $this->db->query("SELECT * FROM stok_produk WHERE id_stokproduk NOT IN ($all_id2) AND kode_varians='$kodeVarians' AND ukuran='$ukuran' ORDER BY id_stokproduk LIMIT $isJmlRetur ")->result();
+                        if(count($all_id)>0){
+                        if(count($all_id)==1){
+                            $qrz = "SELECT * FROM stok_produk WHERE id_stokproduk!='$last_ID'";
+                        } else {
+                            $qrz = "SELECT * FROM stok_produk WHERE id_stokproduk NOT IN ($all_id2) AND kode_varians='$kodeVarians' AND ukuran='$ukuran' ORDER BY id_stokproduk LIMIT $isJmlRetur";
+                        }
+                        $this->data_model->saved('notif',[
+                            'jenis' => 'tesid', 'txtnotif'=>$qrz, 'tms' => date('Y-m-d H:i:s'), 'readsts' => 'n'
+                        ]);
+                        $qry = $this->db->query($qrz)->result();
                         foreach($qry as $val){
                             $id_stokproduk      = $val->id_stokproduk;
                             $kode_produk        = $val->kode_produk;
@@ -309,6 +324,7 @@ class Mutasi2 extends CI_Controller
                             ]);
                             $this->db->query("DELETE FROM stok_produk WHERE id_stokproduk='$id_stokproduk'");
                         } //end foreach
+                        } //end if id nol
                     }
                     
                 } //end for perulangan array dari form penjualan keluar

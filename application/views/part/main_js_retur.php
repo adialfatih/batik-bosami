@@ -124,10 +124,17 @@
                                 }, 1000);
                             }
                         } else {
-                            notif.innerHTML = 'Nomor invoice tidak ditemukan : ' + nomorInv;
-                            notif.style.color = 'red'; 
-                            konten.innerHTML = '' ;
-                            document.getElementById('tipeInvSimpan').value = '0';
+                            if(dataResult.statusCode == 401){
+                                notif.innerHTML = 'Penjualan Defect Tidak Bisa Di Retur : ' + nomorInv;
+                                notif.style.color = 'red'; 
+                                konten.innerHTML = '' ;
+                                document.getElementById('tipeInvSimpan').value = '0';
+                            } else {
+                                notif.innerHTML = 'Nomor invoice tidak ditemukan : ' + nomorInv;
+                                notif.style.color = 'red'; 
+                                konten.innerHTML = '' ;
+                                document.getElementById('tipeInvSimpan').value = '0';
+                            }
                         }
                     }
                 });

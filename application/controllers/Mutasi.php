@@ -32,6 +32,34 @@ class Mutasi extends CI_Controller
             'sess_akses'    =>  $this->session->userdata('akses'),
             'formatData'    => 'tables',
             'scriptForm'    => 'penjualan',
+            'scriptForm2'   => 'ori',
+            'autoComplete'  => 'yes',
+            'codejual'      => $this->data_model->acakKode(27),
+            'dataAuto'      => $im
+        ];
+        $this->load->view('part/header', $data);
+        $this->load->view('part/navigation', $data);
+        $this->load->view('mutasi/data_penjualan', $data);
+        $this->load->view('part/main_js_penjualan', $data);
+        
+    }
+    function penjualanbs(){
+        $kodekain = $this->db->query("SELECT kode_produk,nama_produk FROM master_produk ORDER BY nama_produk");
+        $ar = array();
+        foreach($kodekain->result() as $val){
+            $a = $val->kode_produk." - ".$val->nama_produk;
+            $d = '"'.$a.'"';
+            if(in_array($d, $ar)){} else { $ar[]=$d; }
+        }
+        $im = implode(',', $ar);
+        $data = [
+            'title'         => 'Data Penjualan BS/Defect',
+            'sess_nama'     =>  $this->session->userdata('nama'),
+            'sess_username' =>  $this->session->userdata('username'),
+            'sess_akses'    =>  $this->session->userdata('akses'),
+            'formatData'    => 'tables',
+            'scriptForm'    => 'penjualan',
+            'scriptForm2'   => 'bs',
             'autoComplete'  => 'yes',
             'codejual'      => $this->data_model->acakKode(27),
             'dataAuto'      => $im
@@ -53,7 +81,13 @@ class Mutasi extends CI_Controller
     function get_stok(){
         $modelProduk = $this->input->post('modelProduk', TRUE);
         $ukrproduk   = $this->input->post('ukrproduk', TRUE);
-        $stok        = $this->data_model->get_byid('stok_produk', ['kode_varians'=>$modelProduk, 'ukuran'=>$ukrproduk]);
+        $sc          = $this->input->post('sc', TRUE);
+        if($sc == "ori"){
+            $stok    = $this->data_model->get_byid('stok_produk', ['kode_varians'=>$modelProduk, 'ukuran'=>$ukrproduk]);
+        } else {
+            $stok    = $this->data_model->get_byid('stok_produk_cct', ['kode_varians'=>$modelProduk, 'ukuran'=>$ukrproduk]);
+        }
+        
         $jumlah_stok = $stok->num_rows();
         if($jumlah_stok > 0){
             echo json_encode(array("statusCode" => 200, "message" => $jumlah_stok));
@@ -71,6 +105,7 @@ class Mutasi extends CI_Controller
         $modelProduk        = $this->input->post('modelProduk', TRUE);
         $ukrproduk          = $this->input->post('ukrproduk', TRUE);
         $jmlPenjualan       = $this->input->post('jmlPenjualan', TRUE);
+        $sc                 = $this->input->post('sc', TRUE);
         $ex                 = explode('-', $tglJual);
         $exTanggal          = $ex[0];
         if($exTanggal=="2025"){
@@ -103,7 +138,8 @@ class Mutasi extends CI_Controller
                     'status_pengiriman' => 'Belum Kirim',
                     'harga_totalproduk' => 0,
                     'ongkir'            => 0,
-                    'no_inv'            => $no_inv
+                    'no_inv'            => $no_inv,
+                    'oribs'             => $sc
                 ]);
             } else {
                 $this->data_model->updatedata('codejual',$codejual,'t_penjualan',[
@@ -114,58 +150,113 @@ class Mutasi extends CI_Controller
                 ]);
             }
             if($codeProduk == ""){
-                $rxt = "Data Penjualan";
+                $rxt = "Data Penjualan Error";
                 echo json_encode(array("statusCode" => 200, "message" => $rxt));
             } else {
                 if($codeProduk!="" && $modelProduk!="" && $ukrproduk!="" && $jmlPenjualan!=""){
-                    if($jmlPenjualan>0 && $jmlPenjualan <= $cekStok){
-                        //pindahkan data stok ke stok terjual
-                        $stokSedia   = $this->db->query("SELECT * FROM stok_produk WHERE kode_varians='$modelProduk' AND ukuran='$ukrproduk' ORDER BY id_stokproduk ASC LIMIT $jmlPenjualan");
-                        $total_modal = 0; $harga_terakhir = "";
-                        foreach($stokSedia->result() as $val){
-                            $id_stokproduk      = $val->id_stokproduk;
-                            $kode_produk        = $val->kode_produk;
-                            $kode_varians       = $val->kode_varians;
-                            $ukuran             = $val->ukuran;
-                            $hpp                = $val->hpp;
-                            $harga_jual         = $val->harga_jual;
-                            $codeproduksijahit  = $val->codeproduksijahit;
-                            $kode_produksi      = $val->kode_produksi;
-                            $codestok           = $val->codestok;
-                            $harga_jual_edit    = $val->harga_jual_edit;
-                            if($harga_jual_edit == 0){
-                                $harga_terakhir = $harga_jual;
-                            } else {
-                                $harga_terakhir = $harga_jual_edit;
+                    if($sc == "ori"){
+                        if($jmlPenjualan>0 && $jmlPenjualan <= $cekStok){
+                            //pindahkan data stok ke stok terjual
+                            $stokSedia   = $this->db->query("SELECT * FROM stok_produk WHERE kode_varians='$modelProduk' AND ukuran='$ukrproduk' ORDER BY id_stokproduk ASC LIMIT $jmlPenjualan");
+                            $total_modal = 0; $harga_terakhir = "";
+                            foreach($stokSedia->result() as $val){
+                                $id_stokproduk      = $val->id_stokproduk;
+                                $kode_produk        = $val->kode_produk;
+                                $kode_varians       = $val->kode_varians;
+                                $ukuran             = $val->ukuran;
+                                $hpp                = $val->hpp;
+                                $harga_jual         = $val->harga_jual;
+                                $codeproduksijahit  = $val->codeproduksijahit;
+                                $kode_produksi      = $val->kode_produksi;
+                                $codestok           = $val->codestok;
+                                $harga_jual_edit    = $val->harga_jual_edit;
+                                if($harga_jual_edit == 0){
+                                    $harga_terakhir = $harga_jual;
+                                } else {
+                                    $harga_terakhir = $harga_jual_edit;
+                                }
+                                $total_modal+=$hpp;
+                                $this->data_model->saved('stok_produk_terjual',[
+                                    'id_stokproduk'     => $id_stokproduk,
+                                    'kode_produk'       => $kode_produk,
+                                    'kode_varians'      => $kode_varians,
+                                    'ukuran'            => $ukuran,
+                                    'hpp'               => $hpp,
+                                    'harga_jual'        => $harga_jual,
+                                    'codeproduksijahit' => $codeproduksijahit,
+                                    'kode_produksi'     => $kode_produksi,
+                                    'codestok'          => $codestok,
+                                    'codejual'          => $codejual,
+                                ]);
+                                $this->data_model->delete('stok_produk', 'id_stokproduk', $id_stokproduk);
                             }
-                            $total_modal+=$hpp;
-                            $this->data_model->saved('stok_produk_terjual',[
-                                'id_stokproduk'     => $id_stokproduk,
-                                'kode_produk'       => $kode_produk,
-                                'kode_varians'      => $kode_varians,
-                                'ukuran'            => $ukuran,
-                                'hpp'               => $hpp,
-                                'harga_jual'        => $harga_jual,
-                                'codeproduksijahit' => $codeproduksijahit,
-                                'kode_produksi'     => $kode_produksi,
-                                'codestok'          => $codestok,
+                            $this->data_model->saved('t_penjualan_data',[
                                 'codejual'          => $codejual,
+                                'kodeproduk'        => $codeProduk,
+                                'kodevarians'       => $modelProduk,
+                                'ukuran'            => $ukrproduk,
+                                'jumlah_terjual'    => $jmlPenjualan,
+                                'total_modal'       => $total_modal,
+                                'harga_jual'        => $harga_terakhir,
+                                'jns_jual'          => 'ori'
                             ]);
-                            $this->data_model->delete('stok_produk', 'id_stokproduk', $id_stokproduk);
+                            $rxt = "Data Penjualan Disimpan";
+                            echo json_encode(array("statusCode" => 200, "message" => $rxt));
+                        } else {
+                            echo json_encode(array("statusCode" => 203, "message" => "Jumlah stok tidak mencukupi.!"));
                         }
-                        $this->data_model->saved('t_penjualan_data',[
-                            'codejual'          => $codejual,
-                            'kodeproduk'        => $codeProduk,
-                            'kodevarians'       => $modelProduk,
-                            'ukuran'            => $ukrproduk,
-                            'jumlah_terjual'    => $jmlPenjualan,
-                            'total_modal'       => $total_modal,
-                            'harga_jual'        => $harga_terakhir
-                        ]);
-                        $rxt = "Data Penjualan";
-                        echo json_encode(array("statusCode" => 200, "message" => $rxt));
                     } else {
-                        echo json_encode(array("statusCode" => 203, "message" => "Jumlah stok tidak mencukupi.!"));
+                        $cekStok2       = $this->data_model->get_byid('stok_produk_cct',['kode_varians'=>$modelProduk,'ukuran'=>$ukrproduk])->num_rows();
+                        if($jmlPenjualan>0 && $jmlPenjualan <= $cekStok2){
+                            //pindahkan data stok ke stok terjual
+                            $stokSedia   = $this->db->query("SELECT * FROM stok_produk_cct WHERE kode_varians='$modelProduk' AND ukuran='$ukrproduk' ORDER BY id_stokproduk ASC LIMIT $jmlPenjualan");
+                            $total_modal = 0; $harga_terakhir = "";
+                            foreach($stokSedia->result() as $val){
+                                $id_stokproduk      = $val->id_stokprodukreal;
+                                $kode_produk        = $val->kode_produk;
+                                $kode_varians       = $val->kode_varians;
+                                $ukuran             = $val->ukuran;
+                                $hpp                = $val->hpp;
+                                $harga_jual         = $val->harga_jual;
+                                $codeproduksijahit  = $val->codeproduksijahit;
+                                $kode_produksi      = $val->kode_produksi;
+                                $codestok           = $val->codestok;
+                                $harga_jual_edit    = $val->harga_jual_edit;
+                                if($harga_jual_edit == 0){
+                                    $harga_terakhir = $harga_jual;
+                                } else {
+                                    $harga_terakhir = $harga_jual_edit;
+                                }
+                                $total_modal+=$hpp;
+                                $this->data_model->saved('stok_produk_terjual',[
+                                    'id_stokproduk'     => $id_stokproduk,
+                                    'kode_produk'       => $kode_produk,
+                                    'kode_varians'      => $kode_varians,
+                                    'ukuran'            => $ukuran,
+                                    'hpp'               => $hpp,
+                                    'harga_jual'        => $harga_jual,
+                                    'codeproduksijahit' => $codeproduksijahit,
+                                    'kode_produksi'     => $kode_produksi,
+                                    'codestok'          => $codestok,
+                                    'codejual'          => $codejual,
+                                ]);
+                                $this->data_model->updatedata('id_stokprodukreal', $id_stokproduk, 'stok_produk_cct', ['posisi'=>'terjual']);
+                            }
+                            $this->data_model->saved('t_penjualan_data',[
+                                'codejual'          => $codejual,
+                                'kodeproduk'        => $codeProduk,
+                                'kodevarians'       => $modelProduk,
+                                'ukuran'            => $ukrproduk,
+                                'jumlah_terjual'    => $jmlPenjualan,
+                                'total_modal'       => $total_modal,
+                                'harga_jual'        => $harga_terakhir,
+                                'jns_jual'          => 'bs'
+                            ]);
+                            $rxt = "Data Penjualan Disimpan";
+                            echo json_encode(array("statusCode" => 200, "message" => $rxt));
+                        } else {
+                            echo json_encode(array("statusCode" => 203, "message" => "Jumlah stok tidak mencukupi.!"));
+                        }
                     }
                 } else {
                     echo json_encode(array("statusCode" => 203, "message" => "Anda belum mengisi semua dengan lengkap.!"));
@@ -318,7 +409,8 @@ class Mutasi extends CI_Controller
         }
     }
     function datapenjualan(){
-        $record = $this->data_model->sort_record('tgl_jual','t_penjualan');
+        $sc     = $this->input->post('sc', TRUE);
+        $record = $this->db->query("SELECT * FROM t_penjualan WHERE oribs='$sc' ORDER BY id_jual DESC");
         if($record->num_rows() > 0){
             $no=1;
             foreach($record->result() as $val){
@@ -389,8 +481,9 @@ class Mutasi extends CI_Controller
         $nominalid  = $this->input->post('nominalid', TRUE);
         $nominalid  = preg_replace('/\D/', '', $nominalid);
         $pembid     = $this->input->post('pembid', TRUE);
-        $idpjt     = $this->input->post('idpjt', TRUE);
-        $hrgJual     = $this->input->post('hrgJual', TRUE);
+        $idpjt      = $this->input->post('idpjt', TRUE);
+        $hrgJual    = $this->input->post('hrgJual', TRUE);
+        $codesc    = $this->input->post('codesc', TRUE);
         $this->load->library('upload');
         $upload_path = './uploads/buktibayar/';
         $new_file_name = $this->data_model->get_byid('t_penjualan', ['codejual'=>$codejual])->row("bukti_bayar");
@@ -454,7 +547,12 @@ class Mutasi extends CI_Controller
         $this->data_model->updatedata('codejual',$codejual,'t_penjualan',[
             'harga_totalproduk'    => $total_harga
         ]);
-        redirect('mutasi/penjualan');
+        if($codesc=="ori"){
+            redirect('mutasi/penjualan');
+        } else {
+            redirect('mutasi/penjualan-defect');
+        }
+        
     }
     function showPembayaran(){
         $codejual   = $this->input->post('codejual', TRUE);
