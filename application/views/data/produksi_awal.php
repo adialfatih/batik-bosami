@@ -266,6 +266,53 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--update harga modal-->
+                                <div class="modal fade text-left" id="largeUpdateJasa" tabindex="-1" role="dialog"
+                                    aria-labelledby="my123" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                                        role="document">
+                                        <div class="modal-content">
+                                            <form action="<?=base_url('upload/do_upload');?>" enctype="multipart/form-data" method="post">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="my123">Update Harga Jasa</h4>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <i data-feather="x"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" id="mo156">
+                                                <input type="hidden" name="jenis" value="babar" required>
+                                                <input type="hidden" name="idbars3" id="idbars3" value="0" required>
+                                                <div class="form-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>Kode Babar</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" id="cdbarse34" value="0" name="cdbars" readonly>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Update Harga /Potong</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" id="hrgPptg" value="0" name="hrgPptg" oninput="formatRibuan(this)">
+                                                            <small>Masukan update harga perpotong kain Batik.</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light-secondary"
+                                                    data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    Simpan
+                                                </button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 	</div>
 
 </div>

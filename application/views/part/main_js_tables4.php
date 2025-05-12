@@ -718,6 +718,11 @@
                 }
             })
         }
+        function updateThis(cd,kd){
+            $('#large23').modal('hide');
+            $('#largeUpdateJasa').modal('show');
+            $('#cdbarse34').val(''+kd);
+        }
         function hpsFotoProduksi(idProduksi){
             //console.log(cd);
             Swal.fire({

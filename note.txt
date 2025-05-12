@@ -288,3 +288,11 @@ Code Erorr :
 
 21  -> ID Produksi Babar tidak ada. mungkin sudah di hapus
 192 -> Nomor invoice doble / > 1
+
+
+
+
+Catatan untuk Azmi :
+
+1. Admin bisa input proses babar, dengan memasukan harga babar dengan nominal bebas (Lebih dari nol)
+2. *Penting* : untuk mengupdate harga babar sebelum proses lainya. Terutama sebelum babar kembali ke gudang. Karena itu untuk menghitung HPP berdasarkan inputan.

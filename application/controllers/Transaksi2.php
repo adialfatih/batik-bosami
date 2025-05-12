@@ -380,11 +380,12 @@ class Transaksi2 extends CI_Controller
                     <td style="width:200px;">&bull; Proses Babar</td>
                     <td>: &nbsp;  <?=$proses_babar;?></td>
                 </tr>
+                <?php if($userAkses=="root"){ ?>
                 <tr>
                     <td style="width:200px;">&bull; Ongkos Total</td>
                     <td>: &nbsp;  Rp. <?=number_format($harga_ttl);?></td>
                 </tr>
-                <?php if($userAkses=="root"){ ?>
+                
                 <tr>
                     <td style="width:200px;font-weight:bold;">&bull; HPP 2</td>
                     <td>: &nbsp;  Rp. <strong><?=number_format($harga_pcs);?></strong> /Pcs</td>
@@ -392,6 +393,9 @@ class Transaksi2 extends CI_Controller
                 <?php } ?>
                 <tr>
                     <td style="background:#ccc;font-size:12px;padding:5px;color:#333030;" colspan="2">Di input oleh <em><?=$diinputoleh;?></em> pada <em><?=$tpx1." ".$px1[1];?></em>. <a href="javascript:void(0);" style="color:red;" onclick="hapusThis('<?=$codeproduksi;?>','<?=$kode_babar;?>')">Hapus Proses Ini</a></td>
+                </tr>
+                <tr>
+                    <td style="background:#ccc;font-size:12px;padding:5px;color:#333030;" colspan="2">Update harga / biaya jasa proses babar. <a href="javascript:void(0);" style="color:red;" onclick="updateThis('<?=$codeproduksi;?>','<?=$kode_babar;?>')">Update Harga</a></td>
                 </tr>
                 <tr><td colspan="2">&nbsp;</td></tr>
                 <tr>
