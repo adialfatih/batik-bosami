@@ -218,6 +218,7 @@
                             $('#stokTersedia').val(''+dataResult.message);
                         } else {
                             Swal.fire('Stok Tidak Tersedia');
+                            $('#stokTersedia').val('');
                         }
                     }
                 });

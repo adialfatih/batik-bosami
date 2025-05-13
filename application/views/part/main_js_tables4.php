@@ -722,7 +722,30 @@
             $('#large23').modal('hide');
             $('#largeUpdateJasa').modal('show');
             $('#cdbarse34').val(''+kd);
+            $('#idbars31').val(''+cd);
         }
+        $("#simpanupdateharga").click(function() {
+            var idbars31 = $('#idbars31').val();
+            var hrgPptg = $('#hrgPptg').val();
+            $.ajax({
+                url:"<?=base_url('transaksi2/prosesUpdateHargaBatik');?>",
+                type: "POST",
+                data: {"idbars31":idbars31, "hrgPptg":hrgPptg},
+                cache: false,
+                success: function(dataResult){
+                    var dataResult = JSON.parse(dataResult);
+                    if(dataResult.statusCode==200){
+                        Swal.fire({icon: 'success', title: 'Berhasil update harga',
+                            text: dataResult.message,
+                        });                            
+                    } else {
+                        Swal.fire({icon: 'error', title: 'Gagal',
+                            text: dataResult.message,
+                        });
+                    }
+                }
+            }); 
+        });
         function hpsFotoProduksi(idProduksi){
             //console.log(cd);
             Swal.fire({

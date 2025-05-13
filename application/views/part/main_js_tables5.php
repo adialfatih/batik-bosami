@@ -37,7 +37,7 @@
                     selection: (event) => {
                         const selection = event.detail.selection.value;
                         autoCompleteJS.input.value = selection;
-                        $('#rowProduksID').html('<div style="width:100%;display:flex;justify-content:center;"><div class="loader"></div></div>');
+                        $('#rowProduksID').html('<div style="width:100%;display:flex;justify-content:center;flex-direction:column;align-items:center;"><div class="loader"></div><span>Loading data ...</span></div>');
                         $.ajax({
                             url:"<?=base_url('produk/lihatProduk');?>",
                             type: "POST",
@@ -54,6 +54,58 @@
                 }
             }
         });
+        function addStokAwal(kdvar,kdproduk,mdl,produk){
+            //console.log('tes oke');
+            $('#nmProduks12').val(''+produk);
+            $('#mdlsProduks').val(''+mdl);
+            $('#kdpdks1').val(''+kdproduk);
+            $('#kdvars1').val(''+kdvar);
+            $('#addStokAwal').modal('show');
+        }
+        $('#saveStokAwal').click(function () {
+            var namaProduk  = $('#nmProduks12').val();
+            var modelProduk = $('#mdlsProduks').val();
+            var ukrProduk   = $('#ukrproduk').val();
+            var hpp1        = $('#hpp1').val();
+            var hrgJual     = $('#hrgJual').val();
+            var stokAwal    = $('#stokAwal').val();
+            var kodeProduks = $('#kdpdks1').val();
+            var kodeVarians = $('#kdvars1').val();
+            var kdProduksi  = $('#kdProduksi').val();
+            if(kdProduksi==""){ var kodeProduks = "null"; }
+            if(namaProduk!="" && modelProduk!="" && ukrProduk!="" && hpp1!="" && hrgJual!="" && stokAwal!="" && kodeProduks!="" && kodeVarians!=""){
+                $.ajax({
+                    url:"<?=base_url('produk/addStokAwalProses');?>",
+                    type: "POST",
+                    data: {"namaProduk":namaProduk,"modelProduk":modelProduk,"ukrProduk":ukrProduk,"hpp1":hpp1,"hrgJual":hrgJual,"stokAwal":stokAwal,"kodeProduks":kodeProduks,"kodeVarians":kodeVarians,"kdProduksi":kdProduksi},
+                    cache: false,
+                    success: function(dataResult){
+                        var data = JSON.parse(dataResult);
+                        if(data.statusCode==200){
+                            Swal.fire({icon: 'success',title: 'Berhasil',text: data.message,});
+                        } else {
+                            Swal.fire({icon: 'error',title: 'Gagal',text: data.message,});
+                        }
+                    }
+                });
+            } else {
+                Swal.fire({icon: 'error',title: 'Error',text: 'Data belum lengkap',});
+            }
+        });
+        function lihatProdukAwal(){
+            $.ajax({
+                url:"<?=base_url('produk/lihatProduk');?>",
+                type: "POST",
+                data: {"selection":"Tampilkan Semua"},
+                cache: false,
+                success: function(dataResult){
+                    setTimeout(() => {
+                        $('#rowProduksID').html(dataResult);
+                    }, 1000);
+                }
+            });
+        }
+        lihatProdukAwal();
         function defectShow(kodeProduk){
             $('#large231').modal('show');
             $('#modalsBody12345').html('<div style="width:100%;display:flex;justify-content:center;"><div class="loader"></div></div>');
@@ -163,11 +215,7 @@ $(document).ready(function () {
         }
     });
 });
-// ----adi sh--
-
-
-
-    </script>
+</script>
 <?php } ?>
 <?php  if($scriptForm=="stokproduksi"){ ?>
     <script>

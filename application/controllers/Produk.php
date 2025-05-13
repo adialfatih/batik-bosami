@@ -128,7 +128,9 @@ class Produk extends CI_Controller
                                 $vars = $this->data_model->get_byid('master_produk_varians',['kode_produk'=>$row->kode_produk])->result();
                                 foreach($vars as $var){
                                 $kodevar = $var->kode_varians;
-                                $models = strtolower($var->models);
+                                $kodepdk = $var->kode_produk;
+                                $models  = strtolower($var->models);
+                                $pdk1    = strtolower($var->nama_produk);
                                 ?>
                                 <div style="width:100%;display:flex;justify-content:space-between;">
                                     <span>&bull; <?=ucwords($models);?></span>
@@ -136,14 +138,17 @@ class Produk extends CI_Controller
                                         <?php
                                         $cekSize = $this->db->query("SELECT * FROM stok_produk WHERE kode_varians='$kodevar' GROUP BY ukuran");
                                         if($cekSize->num_rows() > 0){
-                                        foreach($cekSize->result() as $zi){
-                                            $ukr = $zi->ukuran;
-                                            if($ukr == "All Size"){ $ukrprint=""; } else { $ukrprint=$ukr." - "; }
-                                            $pcs = $this->db->query("SELECT COUNT(id_stokproduk) AS jml FROM stok_produk WHERE kode_varians='$kodevar' AND ukuran='$ukr'")->row("jml");
-                                            echo $ukrprint."<strong>".$pcs."</strong> Pcs<br>";
-                                        }
+                                            foreach($cekSize->result() as $zi){
+                                                $ukr = $zi->ukuran;
+                                                if($ukr == "All Size"){ $ukrprint=""; } else { $ukrprint=$ukr." - "; }
+                                                $pcs = $this->db->query("SELECT COUNT(id_stokproduk) AS jml FROM stok_produk WHERE kode_varians='$kodevar' AND ukuran='$ukr'")->row("jml");
+                                                echo $ukrprint."<strong>".$pcs."</strong> Pcs<br>";
+                                            }
                                         } else {
-                                            echo "<font style='color:red;'>0 Pcs</font>";
+                                            //echo "<font style='color:red;'>0 Pcs</font>";
+                                            ?>
+                                            <a href="javascript:void(0);" style="color:red;" onclick="addStokAwal('<?=$kodevar;?>','<?=$kodepdk;?>','<?=strtoupper($models);?>','<?=strtoupper($pdk1);?>')">0 Pcs</a>
+                                            <?php
                                         }
                                         ?>
                                     </div>
@@ -198,6 +203,40 @@ class Produk extends CI_Controller
             <?php
         } else {
             echo "Tidak ada stok defect untuk produk ini";
+        }
+    }
+    function addStokAwalProses(){
+        $namaProduk  = $this->input->post('namaProduk', TRUE);
+        $modelProduk = $this->input->post('modelProduk', TRUE);
+        $ukrProduk   = $this->input->post('ukrProduk', TRUE);
+        $hpp1        = preg_replace("/[^0-9]/", "", $this->input->post('hpp1', TRUE));
+        $hrgJual     = preg_replace("/[^0-9]/", "", $this->input->post('hrgJual', TRUE));
+        $stokAwal    = preg_replace("/[^0-9]/", "", $this->input->post('stokAwal', TRUE));
+        $kodeProduks = $this->input->post('kodeProduks', TRUE);
+        $kodeVarians = $this->input->post('kodeVarians', TRUE);
+        $kdProduksi  = $this->input->post('kdProduksi', TRUE);
+        if($kodeProduks!="" && $kodeVarians!="" && $hpp1!="" && $hrgJual!="" && $stokAwal!=""){
+            $cek     = $this->data_model->get_byid('stok_produk',['kode_varians'=>$kodeVarians])->num_rows();
+            if($cek == 0){
+                for ($i=0; $i < $stokAwal ; $i++) { 
+                    $this->data_model->saved('stok_produk',[
+                        'kode_produk'       => $kodeProduks,
+                        'kode_varians'      => $kodeVarians,
+                        'ukuran'            => $ukrProduk,
+                        'hpp'               => $hpp1,
+                        'harga_jual'        => $hrgJual,
+                        'codeproduksijahit' => 'null',
+                        'kode_produksi'     => $kdProduksi,
+                        'codestok'          => 'null',
+                        'harga_jual_edit'   => $hrgJual
+                    ]);
+                }
+                echo json_encode(array("statusCode" => 200, "message" => "success"));
+            } else {
+                echo json_encode(array("statusCode" => 500, "message" => "Anda harus mengkosongkan stok dahulu.!!"));
+            }
+        } else {
+            echo json_encode(array("statusCode" => 500, "message" => "Anda tidak mengisi data dengan benar.!!"));
         }
     }
 }

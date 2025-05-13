@@ -21,62 +21,7 @@
                 </div>
             </div>
             <div class="row" id="rowProduksID">
-                <?php 
-                if($produkdata->num_rows() > 0){
-                    foreach($produkdata->result() as $row):
-                    $foto = $row->foto_produk;
-                ?>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div style="width:100%;margin-bottom:10px;position:relative;">
-                                    <div style="width:25px;height:25px;background:#d60404;position:absolute;top:5px;right:15px;border-radius:50%;color:#fff;display:flex;justify-content:center;cursor:pointer;" onclick="uploads('<?=$row->kode_produk;?>','<?=$row->nama_produk;?>')"><i class="bi bi-upload"></i></div>
-                                    <?php if($foto=="null"){ ?>
-                                        <img src="<?=base_url('logo/logo.png');?>" style="width:100%;" alt="<?=$row->nama_produk;?>">
-                                    <?php } else { ?>
-                                        <img src="<?=base_url('uploads/produks/'.$foto);?>" style="width:100%;" alt="<?=$row->nama_produk;?>">
-                                    <?php } ?>
-                                </div>
-                                <strong style="color:#0455d6;"><?=$row->nama_produk;?></strong>
-                                <?php
-                                $vars = $this->data_model->get_byid('master_produk_varians',['kode_produk'=>$row->kode_produk])->result();
-                                foreach($vars as $var){
-                                $kodevar = $var->kode_varians;
-                                $models = strtolower($var->models);
-                                ?>
-                                <div style="width:100%;display:flex;justify-content:space-between;">
-                                    <span>&bull; <?=ucwords($models);?></span>
-                                    <div>
-                                        <?php
-                                        $cekSize = $this->db->query("SELECT * FROM stok_produk WHERE kode_varians='$kodevar' GROUP BY ukuran");
-                                        if($cekSize->num_rows() > 0){
-                                        foreach($cekSize->result() as $zi){
-                                            $ukr = $zi->ukuran;
-                                            if($ukr == "All Size"){ $ukrprint=""; } else { $ukrprint=$ukr." - "; }
-                                            $pcs = $this->db->query("SELECT COUNT(id_stokproduk) AS jml FROM stok_produk WHERE kode_varians='$kodevar' AND ukuran='$ukr'")->row("jml");
-                                            echo $ukrprint."<strong>".$pcs."</strong> Pcs<br>";
-                                        }
-                                        } else {
-                                            echo "<font style='color:red;'>0 Pcs</font>";
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                                <?php } 
-                                $cekDefect = $this->data_model->get_byid('stok_produk_cct',['kode_produk'=>$row->kode_produk])->num_rows();
-                                if($cekDefect > 0){
-                                ?>
-                                <div style="width:100%;display:flex;justify-content:space-between;">
-                                    <span>&bull; <a href="javascript:void(0);" style="color:#e66707;" onclick="defectShow('<?=$row->kode_produk;?>')">Stok Defect</a></span>
-                                    <div style="color:#e66707;"><strong><?=$cekDefect;?></strong> Pcs</div>
-                                </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; } ?>
+                <div style="width:100%;display:flex;justify-content:center;flex-direction:column;align-items:center;"><div class="loader"></div><span>Loading data ...</span></div>
             </div>
 		</section>
                         <!--large size Modal -->
@@ -101,7 +46,7 @@
                                                             <label>Nama Produk</label>
                                                         </div>
                                                         <div class="col-md-8 form-group">
-                                                            <input type="text" class="form-control" name="nmProduks" id="nmProduks" placeholder="Masukan Kode Jahit" readonly>
+                                                            <input type="text" class="form-control" name="nmProduks" id="nmProduks" placeholder="Masukan Kode Produk" readonly>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>Foto Produk</label>
@@ -144,6 +89,93 @@
                                                 <button type="button" class="btn btn-light-secondary"
                                                     data-bs-dismiss="modal">
                                                     Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--large size Modal -->
+                                <div class="modal fade text-left" id="addStokAwal" tabindex="-1" role="dialog" aria-labelledby="addStokAwal2" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                                        role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="addStokAwal2">Tambah Stok Awal</h4>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <i data-feather="x"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" id="moda1123s">
+                                                <div class="form-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label>Nama Produk</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" name="nmProduks12" id="nmProduks12" placeholder="Masukan Kode Produk" readonly>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Model Produk</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" name="mdlsProduks" id="mdlsProduks" placeholder="Masukan Model Produk" readonly>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Ukuran Produk</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <select name="ukrproduk" id="ukrproduk" class="form-control">
+                                                                <option value="">Pilih Ukuran Produk</option>
+                                                                <option value="All Size">All Size</option>
+                                                                <option value="S">S - Small</option>
+                                                                <option value="M">M - Medium</option>
+                                                                <option value="L">L - Large</option>
+                                                                <option value="XL">XL - Xtra Large</option>
+                                                                <option value="XXL">XXL - Doble Xtra Large</option>
+                                                                <option value="XXXL">XXXL - Triple Xtra Large</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Harga Produksi (HPP)</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" name="hpp1" id="hpp1" placeholder="Masukan Harga Modal Produk" oninput="formatRibuan(this)">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Harga Jual Produk</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" name="hrgJual" id="hrgJual" placeholder="Masukan Harga Jual Produk" oninput="formatRibuan(this)">
+                                                        </div>
+                                                        
+                                                        <div class="col-md-4">
+                                                            <label style="color:red;">Jumlah Stok Awal</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" name="stokAwal" id="stokAwal" placeholder="Masukan Jumlah Stok Awal" oninput="formatRibuan(this)">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Kode Produksi</label>
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <input type="text" class="form-control" name="kdProduksi" id="kdProduksi" placeholder="Masukan Kode Produksi (opsional)" >
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input type="hidden" name="kdpdks1" id="kdpdks1">
+                                                            <input type="hidden" name="kdvars1" id="kdvars1">
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            &nbsp;
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="button" class="btn btn-primary" id="saveStokAwal">
+                                                    Simpan
                                                 </button>
                                             </div>
                                         </div>

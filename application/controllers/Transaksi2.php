@@ -603,5 +603,15 @@ class Transaksi2 extends CI_Controller
         $this->data_model->delete('stok_produk', 'codestok', $id);
         echo json_encode(array("statusCode" => 200, "message" => "Membatalkan Proses Return"));
     }
+    function prosesUpdateHargaBatik(){
+        $id  = $this->input->post('idbars31', TRUE);
+        $hr  = preg_replace("/[^0-9]/", "", $this->input->post('hrgPptg', TRUE));
+        $cek = $this->data_model->get_byid('produksi_babar',['codeproduksi'=>$id])->row_array();
+        $jml = $cek['jumlah_kirim'];
+        $ttl = intval($jml) * intval($hr);
+        $this->data_model->updatedata('codeproduksi', $id, 'produksi_babar', ['harga_pcs' => $hr, 'harga_ttl'=>$ttl]);
+        $this->data_model->updatedata('codeproduksi', $id, 'stok_kain_proses_babar', ['hpp2' => $ttl]);
+        echo json_encode(array("statusCode" => 200, "message" => "sukses proses update harga batik"));
+    }
 }
 ?>

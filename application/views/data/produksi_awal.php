@@ -272,16 +272,14 @@
                                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
                                         role="document">
                                         <div class="modal-content">
-                                            <form action="<?=base_url('upload/do_upload');?>" enctype="multipart/form-data" method="post">
                                             <div class="modal-header">
                                                 <h4 class="modal-title" id="my123">Update Harga Jasa</h4>
                                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                                     <i data-feather="x"></i>
                                                 </button>
                                             </div>
-                                            <div class="modal-body" id="mo156">
-                                                <input type="hidden" name="jenis" value="babar" required>
-                                                <input type="hidden" name="idbars3" id="idbars3" value="0" required>
+                                            <div class="modal-body" id="mo15612">
+                                                <input type="hidden" name="idbars31" id="idbars31" value="0" required>
                                                 <div class="form-body">
                                                     <div class="row">
                                                         <div class="col-md-4">
@@ -305,11 +303,10 @@
                                                     data-bs-dismiss="modal">
                                                     Close
                                                 </button>
-                                                <button type="submit" class="btn btn-primary">
+                                                <button type="button" class="btn btn-primary" id="simpanupdateharga">
                                                     Simpan
                                                 </button>
                                             </div>
-                                            </form>
                                         </div>
                                     </div>
                                 </div>
