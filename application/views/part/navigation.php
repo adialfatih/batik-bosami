@@ -149,6 +149,24 @@
             <?php if($sess_akses=="root"){ ?>
             <li class="menu-item  has-sub">
                 <a href="#" class='menu-link'>
+                    <i class="bi bi-coin"></i>
+                    <span>Keuangan</span>
+                </a>
+                <div class="submenu ">
+                    <div class="submenu-group-wrapper">
+                        <ul class="submenu-group">
+                            <li class="submenu-item">
+                                <a href="<?=base_url('input-cashflow');?>" class='submenu-link'>Cash Flow</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="<?=base_url('input-gaji');?>" class='submenu-link'>Gaji Karyawan</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="menu-item  has-sub">
+                <a href="#" class='menu-link'>
                     <i class="bi bi-clipboard2-check"></i>
                     <span>Laporan</span>
                 </a>

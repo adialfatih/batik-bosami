@@ -556,5 +556,61 @@ class Proses extends CI_Controller
             echo json_encode(array("statusCode" => 500, "message" => "Anda harus mengisi semua data dengan benar..!!" ));
         }
     }
+    function inputUang(){
+        $tglMasuk            = $this->input->post('tglMasuk', TRUE);
+        $inputNominalMasuk   = $this->input->post('inputNominalMasuk', TRUE);
+        $inputNominalMasuk   = preg_replace('/[^0-9]/', '', $inputNominalMasuk);
+        $kategoriMasuk       = $this->input->post('kategoriMasuk', TRUE);
+        $keteranganMasuk     = $this->input->post('keteranganMasuk', TRUE);
+        if($tglMasuk!="" AND $inputNominalMasuk!="" AND $kategoriMasuk!="" AND $keteranganMasuk!=""){
+            $this->data_model->saved('a_keuangan',[
+                'jenisflow' => 'in',
+                'nominal'   => $inputNominalMasuk,
+                'kategori'  => $kategoriMasuk,
+                'keterangan'=> $keteranganMasuk,
+                'tgl'       => $tglMasuk,
+                'tgl_tms'   => date('Y-m-d H:i:s'),
+                'adminput'  => $this->session->userdata('username')
+            ]);
+            echo json_encode(array("statusCode" => 200, "message" => "Berhasil menyimpan uang masuk." ));
+        } else {
+            echo json_encode(array("statusCode" => 500, "message" => "Data yang anda masukan tidak lengkap.!!" ));
+        }
+    }
+    function inputUangKeluar(){
+        $tglMasuk            = $this->input->post('tglKeluar', TRUE);
+        $inputNominalMasuk   = $this->input->post('inputNominalKeluar', TRUE);
+        $inputNominalMasuk   = preg_replace('/[^0-9]/', '', $inputNominalMasuk);
+        $kategoriMasuk       = $this->input->post('kategorikeluar', TRUE);
+        $keteranganMasuk     = $this->input->post('keteranganKeluar', TRUE);
+        if($tglMasuk!="" AND $inputNominalMasuk!="" AND $kategoriMasuk!="" AND $keteranganMasuk!=""){
+            $this->data_model->saved('a_keuangan',[
+                'jenisflow' => 'out',
+                'nominal'   => $inputNominalMasuk,
+                'kategori'  => $kategoriMasuk,
+                'keterangan'=> $keteranganMasuk,
+                'tgl'       => $tglMasuk,
+                'tgl_tms'   => date('Y-m-d H:i:s'),
+                'adminput'  => $this->session->userdata('username')
+            ]);
+            echo json_encode(array("statusCode" => 200, "message" => "Berhasil menyimpan pengeluaran." ));
+        } else {
+            echo json_encode(array("statusCode" => 500, "message" => "Data yang anda masukan tidak lengkap.!!" ));
+        }
+    }
+    function delCashFlow(){
+        $id = $this->input->post('id', TRUE);
+        $getData = $this->data_model->get_byid('a_keuangan', ['iduang'=>$id])->row_array();
+        $inout = $getData['jenisflow'];
+        $nominal = number_format($getData['nominal']);
+        if($inout == 'in'){
+            $txtx = "Menghapus data pemasukan sebesar Rp. ".$nominal."";
+        } else {
+            $txtx = "Menghapus data pengeluaran sebesar Rp. ".$nominal."";
+        }
+        
+        $this->data_model->delete('a_keuangan', 'iduang', $id);
+        echo json_encode(array("statusCode" => 200, "message" => $txtx ));
+    }
 }
 ?>

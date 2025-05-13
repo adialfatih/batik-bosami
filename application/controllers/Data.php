@@ -503,6 +503,47 @@ class Data extends CI_Controller
             echo "success2";
         }
     }
+    function loadCashFlow(){
+        $record = $this->data_model->sort_record('tgl','a_keuangan');
+        if($record->num_rows() > 0){
+            foreach($record->result() as $val){
+                $jenis = $val->jenisflow;
+                $nominal = $val->nominal;
+                $nominal2 = number_format($val->nominal);
+                $tgl = date('d M Y', strtotime($val->tgl));
+                ?>
+                <tr>
+                    <td>
+                        <?php 
+                        if($jenis=="in"){
+                            $tipejenis = "Pemasukan";
+                            echo '<span class="badge bg-success">MASUK</span>';
+                        } else {
+                            $tipejenis = "Pengeluaran";
+                            echo '<span class="badge bg-danger">KELUAR</span>';
+                        }
+                        ?>
+                    </td>
+                    <td>
+                        <?php 
+                        if($jenis=="in"){
+                            echo '<font style="color:green;">Rp. '.$nominal2.'</font>';
+                        } else {
+                            echo '<font style="color:red;">Rp. '.$nominal2.'</font>';
+                        }
+                        ?>
+                    </td>
+                    <td><?=$tgl;?></td>
+                    <td><?=$val->kategori;?></td>
+                    <td><?=$val->keterangan;?></td>
+                    <td><a href="javascript:void(0);" style="color:red;" onclick="hapusCashFlow('<?=$val->iduang;?>','<?=$tipejenis;?>')"><i class="bi bi-trash-fill"></i></a></td>
+                </tr>
+                <?php
+            }
+        } else {
+            echo '<tr><td colspan="6" style="color:red;">Tidak ada data</td></tr>';
+        }
+    }
 
 }
 ?>

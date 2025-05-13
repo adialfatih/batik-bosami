@@ -38,6 +38,7 @@ $route['simpan-babaran']            = 'proses/simpanbabar';
 $route['mutasi/penjualan-defect']   = 'mutasi/penjualanbs';
 
 $route['laporan-cashflow']          = 'laporan/cashflow';
+$route['input-cashflow']            = 'laporan/inputcashflow';
 
 $route['404_override']          = 'Notfounde';
 $route['translate_uri_dashes']  = FALSE;

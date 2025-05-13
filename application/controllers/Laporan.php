@@ -20,7 +20,8 @@ class Laporan extends CI_Controller
             'sess_username' =>  $this->session->userdata('username'),
             'sess_akses'    =>  $this->session->userdata('akses'),
             'formatData'    => 'tables',
-            'scriptForm'    => 'cashflow'
+            'scriptForm'    => 'cashflow',
+            'dateTeimePicker' => 'yes'
         ];
         $this->load->view('part/header', $data);
         $this->load->view('part/navigation', $data);
@@ -29,7 +30,28 @@ class Laporan extends CI_Controller
         } else {
             $this->load->view('block_akses', $data);
         }
-        $this->load->view('part/main_js_tables', $data);
+        $this->load->view('part/main_js_laporan', $data);
+    } //end
+
+    function inputcashflow(){
+        $data = [
+            'title'         => 'Cash Flow / Keuangan',
+            'sess_nama'     =>  $this->session->userdata('nama'),
+            'sess_username' =>  $this->session->userdata('username'),
+            'sess_akses'    =>  $this->session->userdata('akses'),
+            'formatData'    => 'tables',
+            'scriptForm'    => 'cashflow',
+            'dateTeimePicker' => 'yes',
+            'showTable'       => 'tableCashFlow'
+        ];
+        $this->load->view('part/header', $data);
+        $this->load->view('part/navigation', $data);
+        if($this->session->userdata('akses')=="root"){
+            $this->load->view('laporan/cashflowinput', $data);
+        } else {
+            $this->load->view('block_akses', $data);
+        }
+        $this->load->view('part/main_js_laporan', $data);
     }
 
 
