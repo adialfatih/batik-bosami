@@ -577,6 +577,51 @@ class Proses extends CI_Controller
             echo json_encode(array("statusCode" => 500, "message" => "Data yang anda masukan tidak lengkap.!!" ));
         }
     }
+    function inputGaji(){
+        $perioderGaji       = $this->input->post('perioderGaji', TRUE);
+        $tglPenggajian      = $this->input->post('tglPenggajian', TRUE);
+        $inputNominalGaji   = $this->input->post('inputNominalGaji', TRUE);
+        $inputNominalGaji   = preg_replace('/[^0-9]/', '', $inputNominalGaji);
+        $namaKaryawan       = $this->input->post('namaKaryawan', TRUE);
+        $metodeGaji         = $this->input->post('metodeGaji', TRUE);
+        $ket                = $this->input->post('keteranganGaji', TRUE);
+        $codesave           = $this->data_model->acakKode(21);
+        $nama_kar           = $this->data_model->get_byid('master_karyawan', ['id_karyawan'=>$namaKaryawan])->row("nama_kar");
+        if($tglPenggajian!="" AND $namaKaryawan!="" AND $metodeGaji!="" AND $inputNominalGaji>0){
+            $cekGaji = $this->data_model->get_byid('a_gajikaryawan', ['id_karyawan'=>$namaKaryawan, 'tanggal_gaji'=>$tglPenggajian])->num_rows();
+            if($cekGaji == 0){
+                $this->data_model->saved('a_gajikaryawan',[
+                    'id_karyawan'   => $namaKaryawan,
+                    'periode'       => $perioderGaji=="" ? "Mingguan" : $perioderGaji,
+                    'tanggal_gaji'  => $tglPenggajian,
+                    'nominal'       => $inputNominalGaji,
+                    'metode_gaji'   => $metodeGaji,
+                    'ket'           => $ket=="" ? "null" : $ket,
+                    'tglinput'      => date('Y-m-d H:i:s'),
+                    'yginput'       => $this->session->userdata('username'),
+                    'codesaved'     => $codesave
+                ]);
+                $tyx = "Pembayaran Gaji ".$nama_kar."";
+                $this->data_model->saved('a_keuangan',[
+                    'jenisflow' => 'out',
+                    'nominal'   => $inputNominalGaji,
+                    'kategori'  => 'Gaji Karyawan',
+                    'keterangan'=> $tyx,
+                    'tgl'       => $tglPenggajian,
+                    'tgl_tms'   => date('Y-m-d H:i:s'),
+                    'adminput'  => $this->session->userdata('username'),
+                    'codesaved'     => $codesave
+                ]);
+                $xt = "Memproses gaji karyawan ".$nama_kar."";
+                echo json_encode(array("statusCode" => 200, "message" => $xt));
+            } else {
+                $xt = "Tidak memproses gaji karyawan ".$nama_kar."";
+                echo json_encode(array("statusCode" => 500, "message" => $xt));
+            }
+        } else {
+            echo json_encode(array("statusCode" => 500, "message" => "Data yang anda masukan tidak lengkap.!!" ));
+        }
+    }
     function inputUangKeluar(){
         $tglMasuk            = $this->input->post('tglKeluar', TRUE);
         $inputNominalMasuk   = $this->input->post('inputNominalKeluar', TRUE);
@@ -602,6 +647,8 @@ class Proses extends CI_Controller
         $id = $this->input->post('id', TRUE);
         $getData = $this->data_model->get_byid('a_keuangan', ['iduang'=>$id])->row_array();
         $inout = $getData['jenisflow'];
+        $tipes = $getData['kategori'];
+        $codes = $getData['codesaved'];
         $nominal = number_format($getData['nominal']);
         if($inout == 'in'){
             $txtx = "Menghapus data pemasukan sebesar Rp. ".$nominal."";
@@ -610,6 +657,18 @@ class Proses extends CI_Controller
         }
         
         $this->data_model->delete('a_keuangan', 'iduang', $id);
+        if($tipes == 'Gaji Karyawan'){
+            $this->data_model->delete('a_gajikaryawan', 'codesaved', $codes);
+        }
+        echo json_encode(array("statusCode" => 200, "message" => $txtx ));
+    }
+    function delGajis(){
+        $id = $this->input->post('id', TRUE);
+        $getData = $this->data_model->get_byid('a_gajikaryawan', ['idgaji'=>$id])->row_array();
+        $codes = $getData['codesaved'];
+        $this->data_model->delete('a_gajikaryawan', 'idgaji', $id);
+        $this->data_model->delete('a_keuangan', 'codesaved', $codes);
+        $txtx = "Menghapus gaji karyawan";
         echo json_encode(array("statusCode" => 200, "message" => $txtx ));
     }
 }

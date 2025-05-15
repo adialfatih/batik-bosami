@@ -97,6 +97,9 @@
             });
         }
     });
+    $("#showReportFilter").click(function() {
+        Swal.fire({icon: 'info', title: 'Informasi', text: 'Laporan tersedia setelah anda menyimpan data minimal 20 hari..!!',});
+    });
     $("#savePengeluaran").click(function() {
         $("#loadersId3").show();
         $("#savePengeluaran").hide();
@@ -167,7 +170,101 @@
         });
     }
     </script>
-<?php }  ?>
+<?php } if($scriptForm=="gajiKaryawan"){ ?>
+<script>
+    function showTableGaji(){
+        $('#tableBody').html('<tr><td colspan="6">Loading...</td></tr>');
+        $.ajax({
+            url:"<?=base_url('data/loadDataGaji');?>",
+            type: "POST",
+            data: {"kd" : "tes"},
+            cache: false,
+            success: function(dataResult){
+                setTimeout(() => {
+                    if ($.fn.DataTable.isDataTable('#table1')) {
+                        $('#table1').DataTable().destroy();
+                    }
+                    $('#tableBody').html(dataResult);
+                    $('#table1').DataTable();
+                }, 100);
+            }
+        });
+    }
+    showTableGaji();
+    function hapusGaji(id,kar){
+        Swal.fire({
+            title: 'Hapus Gaji',
+            text: "Menghapus gaji karyawan atas nama "+kar+"",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url:"<?=base_url('proses/delGajis');?>",
+                    type: "POST",
+                    data: {"id" : id},
+                    cache: false,
+                    success: function(dataResult){
+                        var dataResult = JSON.parse(dataResult);
+                        if(dataResult.statusCode==200){
+                            Swal.fire({icon: 'success', title: 'Berhasil Hapus', text: dataResult.message,}).then((result) => {
+                                showTableGaji();
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+    $("#saveGaji").click(function() {
+        $("#loadersId2").show();
+        $("#saveGaji").hide();
+        console.log('tes 1');
+        var perioderGaji     = $("#perioderGaji").val();
+        var tglPenggajian    = $("#tglPenggajian").val();
+        var namaKaryawan     = $("#namaKaryawan").val();
+        var inputNominalGaji = $("#inputNominalGaji").val();
+        var metodeGaji       = $("#metodeGaji").val();
+        var keteranganGaji   = $("#keteranganGaji").val();
+        if(tglPenggajian!="" && namaKaryawan!="" && inputNominalGaji!="" && metodeGaji!=""){
+            $.ajax({
+                url:"<?=base_url('proses/inputGaji');?>",
+                type: "POST",
+                data: {"perioderGaji" : perioderGaji, "tglPenggajian" : tglPenggajian, "namaKaryawan" : namaKaryawan, "inputNominalGaji" : inputNominalGaji, "metodeGaji" : metodeGaji, "keteranganGaji" : keteranganGaji},
+                cache: false,
+                success: function(dataResult){
+                    var data = JSON.parse(dataResult);
+                    if(data.statusCode==200){
+                        Swal.fire({icon: 'success', title: 'Berhasil Simpan', text: data.message,}).then((result) => {
+                            $("#loadersId2").hide();
+                            $("#saveGaji").show();
+                            $("#inputNominalGaji").val('');
+                            $("#namaKaryawan").val('');
+                            $("#metodeGaji").val('');
+                            $("#keteranganGaji").val('');
+                            showTableGaji();
+                        });
+                    } else {
+                        Swal.fire({icon: 'error', title: 'Gagal Menyimpan', text: data.message,}).then((result) => {
+                            $("#loadersId2").hide();
+                            $("#saveGaji").show();
+                        });
+                    }
+                }
+            });
+        } else {
+            Swal.fire({icon: 'error', title: 'Oops...', text: 'Anda harus mengisi semua data.!!',}).then((result) => {
+                $("#loadersId2").hide();
+                $("#saveGaji").show();
+            });
+        }
+    });
+</script>
+<?php } ?>
 <script>
 function formatRibuan(input) {
     let angka = input.value.replace(/[^0-9]/g, '');

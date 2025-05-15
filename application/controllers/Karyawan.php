@@ -186,14 +186,15 @@ class Karyawan extends CI_Controller
     }
     function inputgaji(){
         $data = [
-            'title'         => 'Gaji Karyawan',
-            'sess_nama'     =>  $this->session->userdata('nama'),
-            'sess_username' =>  $this->session->userdata('username'),
-            'sess_akses'    =>  $this->session->userdata('akses'),
-            'formatData'    => 'tables',
-            'scriptForm'    => 'cashflow',
-            'dateTeimePicker' => 'yes',
-            'showTable'       => 'tableCashFlow'
+            'title'             => 'Gaji Karyawan',
+            'sess_nama'         =>  $this->session->userdata('nama'),
+            'sess_username'     =>  $this->session->userdata('username'),
+            'sess_akses'        =>  $this->session->userdata('akses'),
+            'formatData'        => 'tables',
+            'scriptForm'        => 'gajiKaryawan',
+            'dateTeimePicker'   => 'yes',
+            'showTable'         => 'tableCashFlow',
+            'dataKaryawan'      => $this->data_model->get_byid('master_karyawan', ['status_aktif' => 'Aktif'])->result()
         ];
         $this->load->view('part/header', $data);
         $this->load->view('part/navigation', $data);

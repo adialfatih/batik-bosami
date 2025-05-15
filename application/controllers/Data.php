@@ -543,7 +543,31 @@ class Data extends CI_Controller
         } else {
             echo '<tr><td colspan="6" style="color:red;">Tidak ada data</td></tr>';
         }
-    }
+    } //end
+
+    function loadDataGaji(){
+        $record = $this->data_model->sort_record('tanggal_gaji','a_gajikaryawan');
+        if($record->num_rows() > 0){
+            foreach($record->result() as $val){
+                $idgaji = $val->idgaji;
+                $periode = $val->periode;
+                $tanggal = date('d M Y',strtotime($val->tanggal_gaji));
+                $nominal = number_format($val->nominal);
+                $metode = $val->metode_gaji;
+                $nmkar   = $this->db->query("SELECT id_karyawan,nama_kar FROM master_karyawan WHERE id_karyawan='$val->id_karyawan'")->row("nama_kar");
+                ?>
+                <tr>
+                    <td><?=$periode;?></td>
+                    <td><?=$tanggal;?></td>
+                    <td><?=$nmkar;?></td>
+                    <td><?=$nominal;?></td>
+                    <td><?=$nominal;?></td>
+                    <td><a href="javascript:void(0);" style="color:red;" onclick="hapusGaji('<?=$idgaji;?>','<?=$nmkar;?>')"><i class="bi bi-trash-fill"></i></a></td>
+                </tr>
+                <?php
+            }
+        }
+    } //end function
 
 }
 ?>
