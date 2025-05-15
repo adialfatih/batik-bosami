@@ -184,6 +184,26 @@ class Karyawan extends CI_Controller
             echo json_encode(array("statusCode" => 500, "message" => "Masih ada data yang kosong..!!"));
         }
     }
+    function inputgaji(){
+        $data = [
+            'title'         => 'Gaji Karyawan',
+            'sess_nama'     =>  $this->session->userdata('nama'),
+            'sess_username' =>  $this->session->userdata('username'),
+            'sess_akses'    =>  $this->session->userdata('akses'),
+            'formatData'    => 'tables',
+            'scriptForm'    => 'cashflow',
+            'dateTeimePicker' => 'yes',
+            'showTable'       => 'tableCashFlow'
+        ];
+        $this->load->view('part/header', $data);
+        $this->load->view('part/navigation', $data);
+        if($this->session->userdata('akses')=="root"){
+            $this->load->view('laporan/input_gaji', $data);
+        } else {
+            $this->load->view('block_akses', $data);
+        }
+        $this->load->view('part/main_js_laporan', $data);
+    }
     
 }
 ?>

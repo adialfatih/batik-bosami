@@ -36,6 +36,7 @@ $route['mutasi/retur-produk']   = 'mutasi2/returbarangv2';
 $route['save-pembelian']            = 'proses/simpanpembeliankain';
 $route['simpan-babaran']            = 'proses/simpanbabar';
 $route['mutasi/penjualan-defect']   = 'mutasi/penjualanbs';
+$route['input-gaji']                = 'karyawan/inputgaji';
 
 $route['laporan-cashflow']          = 'laporan/cashflow';
 $route['input-cashflow']            = 'laporan/inputcashflow';
